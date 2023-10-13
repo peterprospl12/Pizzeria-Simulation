@@ -1,0 +1,21 @@
+[GENERATED OBJECT FILE]
+b__simulation.o
+[PROJECT FILES]
+C:\users\qsend\downloads\adasymulacja\simulation.gpr
+20231013194654 d673b3c1fe6ff12306caadba134d9c3d
+[BOUND OBJECT FILES]
+C:\users\qsend\downloads\adasymulacja\.objs\simulation.o
+[GENERATED SOURCE FILES]
+b__simulation.ads
+b__simulation.adb
+b__simulation.ali
+[RESULTING OPTIONS]
+-LC:\users\qsend\downloads\adasymulacja\.objs\
+-LC:\users\qsend\downloads\adasymulacja\.objs\
+-LC:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/adalib/
+-static
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/adalib/libgnarl.a
+C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/adalib/libgnat.a
+-Xlinker
+--stack=0x200000,0x1000
+-mthreads

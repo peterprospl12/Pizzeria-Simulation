@@ -1,0 +1,3 @@
+{ 
+    "version": "2.0.0", 
+    "tasks": [ { "label": "Build", "type": "shell", "command": "C:\\msys64\\mingw64\\bin\\gprbuild.exe", "args": [ "${workspaceFolder}\\simulation.gpr", "-f", "-cargs", "-g" ], "group": { "kind": "build", "isDefault": true } } ] }

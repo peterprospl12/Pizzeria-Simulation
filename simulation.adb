@@ -21,7 +21,6 @@ procedure Simulation is
    package Random_Assembly is new
      Ada.Numerics.Discrete_Random(Assembly_Type);
    type My_Str is new String(1 ..256);
-
    -- Producer produces determined product
    task type Producer is
       -- Give the Producer an identity, i.e. the product type
@@ -105,14 +104,14 @@ procedure Simulation is
    end Consumer;
 
    task body Buffer is
-      Storage_Capacity: constant Integer := 30;
+      Storage_Capacity: constant Integer := 40;
       type Storage_type is array (Product_Type) of Integer;
       Storage: Storage_type
 	:= (0, 0, 0, 0, 0);
       Assembly_Content: array(Assembly_Type, Product_Type) of Integer
-	:= ((2, 1, 2, 1, 2),
-	    (2, 2, 0, 1, 0),
-	    (1, 1, 2, 0, 1));
+	:= ((1, 2, 0, 2, 1),
+	    (0, 1, 1, 2, 1),
+	    (0, 0, 0, 2, 3));
       Max_Assembly_Content: array(Product_Type) of Integer;
       Assembly_Number: array(Assembly_Type) of Integer
 	:= (1, 1, 1);
@@ -123,52 +122,49 @@ procedure Simulation is
 	 for W in Product_Type loop
 	    Max_Assembly_Content(W) := 0;
 	    for Z in Assembly_Type loop
-	       if Assembly_Content(Z, W) > Max_Assembly_Content(W) then
-		  Max_Assembly_Content(W) := Assembly_Content(Z, W);
-	       end if;
+		  Max_Assembly_Content(W) := Max_Assembly_Content(W) + Assembly_Content(Z, W);
 	    end loop;
+		Max_Assembly_Content(W) := Max_Assembly_Content(w) * 2;
 	 end loop;
       end Setup_Variables;
 
       function Can_Accept(Product: Product_Type) return Boolean is
-	 Free: Integer;		--  free room in the storage
-	 -- how many products are for production of arbitrary assembly
-	 Lacking: array(Product_Type) of Integer;
-	 -- how much room is needed in storage to produce arbitrary assembly
-	 Lacking_room: Integer;
-	 MP: Boolean;			--  can accept
-      begin
-	 if In_Storage >= Storage_Capacity then
-	    return False;
-	 end if;
-	 -- There is free room in the storage
-	 Free := Storage_Capacity - In_Storage;
-	 MP := True;
-	 for W in Product_Type loop
-	    if Storage(W) < Max_Assembly_Content(W) then
-	       MP := False;
-	    end if;
-	 end loop;
-	 if MP then
-	    return True;		--  storage has products for arbitrary
-	       				--  assembly
-	 end if;
-	 if Integer'Max(0, Max_Assembly_Content(Product) - Storage(Product)) > 0 then
-	    -- exactly this product lacks
-	    return True;
-	 end if;
-	 Lacking_room := 1;			--  insert current product
-	 for W in Product_Type loop
-	    Lacking(W) := Integer'Max(0, Max_Assembly_Content(W) - Storage(W));
-	    Lacking_room := Lacking_room + Lacking(W);
-	 end loop;
-	 if Free >= Lacking_room then
-	    -- there is enough room in storage for arbitrary assembly
-	    return True;
-	 else
-	    -- no room for this product
-	    return False;
-	 end if;
+	  -- Taktyka działania
+	  -- 1. Sprawdzamy czy jest miejsce w magazynie
+	  -- 2. Sprawdzamy czy jest już maksymalna ilość danego produktu
+	  -- 		Jeśli nie - przyjmujemy dostawe
+	  --      
+	  --  		Jeśli tak:
+	  --  			Sprawdzamy czy pozostałe produkty osiągnęły już swój poziom maksymalny w magazynie
+	  --  			Jeśli tak - to przyjmujemy dostawe
+	  -- 			Jeśli nie - odrzucamy
+		Free: Integer;
+		MP: Boolean;
+	  begin
+		if In_Storage >= Storage_Capacity then
+			Put_Line("[B] Storage is full!");
+			return False;
+		end if;
+
+		Free := Storage_Capacity - In_Storage;
+		MP := true;
+		if Storage(Product) >= Max_Assembly_Content(Product) then
+			for I in Product_Type loop
+				if Storage(I) < Max_Assembly_Content(I) then
+					MP := false;
+					exit;
+				end if;
+			end loop;
+
+			if MP then 
+				return True;
+			else
+				Put_Line("[B] We got enough of " & Assembly_Name(Product) & " in storage!");
+				return False;
+			end if;
+		else
+			return True;
+		end if;
       end Can_Accept;
 
       function Can_Deliver(Assembly: Assembly_Type) return Boolean is
@@ -184,30 +180,30 @@ procedure Simulation is
       procedure Storage_Contents is
       begin
 	 for W in Product_Type loop
-	    Put_Line("Storage contents: " & Integer'Image(Storage(W)) & " "
+	    Put_Line("[B] Storage contents: " & Integer'Image(Storage(W)) & " "
 		       & Product_Name(W));
 	 end loop;
       end Storage_Contents;
 
    begin
-      Put_Line("Buffer started");
+      Put_Line("[B] Pizzeria has opened");
       Setup_Variables;
       loop
 	 accept Take(Product: in Product_Type; Number: in Integer) do
 	   if Can_Accept(Product) then
-	      Put_Line("Accepted product " & Product_Name(Product) & " number " &
+	      Put_Line("[B] Received product " & Product_Name(Product) & " number " &
 		Integer'Image(Number));
 	      Storage(Product) := Storage(Product) + 1;
 	      In_Storage := In_Storage + 1;
   	   else
-	      Put_Line("Rejected product " & Product_Name(Product) & " number " &
+	      Put_Line("[B] Rejected product " & Product_Name(Product) & " number " &
 		    Integer'Image(Number));
 	   end if;
 	 end Take;
 	 Storage_Contents;
 	 accept Deliver(Assembly: in Assembly_Type; Number: out Integer) do
 	    if Can_Deliver(Assembly) then
-	       Put_Line("Delivered assembly " & Assembly_Name(Assembly) & " number " &
+	       Put_Line("[B] Delivered pizza " & Assembly_Name(Assembly) & " number " &
 			  Integer'Image(Assembly_Number(Assembly)));
 	       for W in Product_Type loop
 		  Storage(W) := Storage(W) - Assembly_Content(Assembly, W);
@@ -216,7 +212,7 @@ procedure Simulation is
 	       Number := Assembly_Number(Assembly);
 	       Assembly_Number(Assembly) := Assembly_Number(Assembly) + 1;
 	    else
-	       Put_Line("Lacking products for assembly " & Assembly_Name(Assembly));
+	       Put_Line("[B] Lacking products for pizza " & Assembly_Name(Assembly));
 	       Number := 0;
 	    end if;
 	 end Deliver;
