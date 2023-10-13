@@ -20,11 +20,10 @@ procedure Simulation is
      := ("Capriciosa", "Salami    ", "Margharita");
    package Random_Assembly is new
      Ada.Numerics.Discrete_Random(Assembly_Type);
-   type My_Str is new String(1 ..256);
    -- Producer produces determined product
    task type Producer is
       -- Give the Producer an identity, i.e. the product type
-      entry Start(Product: in Product_Type; Production_Time: in Integer);
+      entry Start(Product: in Product_Type);
    end Producer;
 
    -- Consumer gets an arbitrary assembly of several products from the buffer
@@ -49,21 +48,24 @@ procedure Simulation is
       subtype Production_Time_Range is Integer range 3 .. 6;
       package Random_Production is new
 	Ada.Numerics.Discrete_Random(Production_Time_Range);
-      G: Random_Production.Generator;	--  generator liczb losowych
+      G: Random_Production.Generator;	--  random number generator
       Product_Type_Number: Integer;
       Product_Number: Integer;
-      Production: Integer;
+	  Production_Time: Integer;
+
    begin
-      accept Start(Product: in Product_Type; Production_Time: in Integer) do
+      accept Start(Product: in Product_Type) do
 	 Random_Production.Reset(G);	--  start random number generator
 	 Product_Number := 1;
 	 Product_Type_Number := Product;
-	 Production := Production_Time;
+	 Production_Time := Random_Production.Random(G);
+	 
       end Start;
-      Put_Line("Started producer of " & Product_Name(Product_Type_Number));
+      Put_Line("[P] Started producer of " & Product_Name(Product_Type_Number) &
+	   " Time left: " & Integer'Image(Production_Time) );
       loop
-	 delay Duration(Random_Production.Random(G)); --  symuluj produkcję
-	 Put_Line("Produced product " & Product_Name(Product_Type_Number)
+	 delay Duration(Production_Time); --  simulate production
+	 Put_Line("[P] Produced product " & Product_Name(Product_Type_Number)
 		    & " number "  & Integer'Image(Product_Number));
 	 -- Accept for storage
 	 B.Take(Product_Type_Number, Product_Number);
@@ -86,8 +88,8 @@ procedure Simulation is
    begin
       accept Start(Consumer_Number: in Consumer_Type;
 		     Consumption_Time: in Integer) do
-	 Random_Consumption.Reset(G);	--  ustaw generator
-	 Random_Assembly.Reset(G2);	--  też
+	 Random_Consumption.Reset(G);	--  set generator
+	 Random_Assembly.Reset(G2);	--  also
 	 Consumer_Nb := Consumer_Number;
 	 Consumption := Consumption_Time;
       end Start;
@@ -129,15 +131,13 @@ procedure Simulation is
       end Setup_Variables;
 
       function Can_Accept(Product: Product_Type) return Boolean is
-	  -- Taktyka działania
-	  -- 1. Sprawdzamy czy jest miejsce w magazynie
-	  -- 2. Sprawdzamy czy jest już maksymalna ilość danego produktu
-	  -- 		Jeśli nie - przyjmujemy dostawe
-	  --      
-	  --  		Jeśli tak:
-	  --  			Sprawdzamy czy pozostałe produkty osiągnęły już swój poziom maksymalny w magazynie
-	  --  			Jeśli tak - to przyjmujemy dostawe
-	  -- 			Jeśli nie - odrzucamy
+		-- 1. Check if there is space in the warehouse.
+		-- 2. Check if the maximum quantity of the specific product has been reached.
+		-- 		If not, accept the delivery.
+		-- 		If yes:
+		-- 			Check if the remaining products have already reached their maximum level in the warehouse.
+		-- 			If they have, accept the delivery.
+		-- 		If they haven't, reject it.
 		Free: Integer;
 		MP: Boolean;
 	  begin
@@ -176,7 +176,7 @@ procedure Simulation is
 	 end loop;
 	 return True;
       end Can_Deliver;
-
+		
       procedure Storage_Contents is
       begin
 	 for W in Product_Type loop
@@ -222,7 +222,7 @@ procedure Simulation is
    
 begin
    for I in 1 .. Number_Of_Products loop
-      P(I).Start(I, 10);
+      P(I).Start(I);
    end loop;
    for J in 1 .. Number_Of_Consumers loop
       K(J).Start(J,12);
