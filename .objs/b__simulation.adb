@@ -41,12 +41,12 @@ package body ada_main is
    E006 : Short_Integer; pragma Import (Ada, E006, "ada__calendar__delays_E");
    E164 : Short_Integer; pragma Import (Ada, E164, "ada__real_time_E");
    E118 : Short_Integer; pragma Import (Ada, E118, "ada__text_io_E");
-   E196 : Short_Integer; pragma Import (Ada, E196, "system__random_seed_E");
-   E204 : Short_Integer; pragma Import (Ada, E204, "system__tasking__initialization_E");
-   E212 : Short_Integer; pragma Import (Ada, E212, "system__tasking__protected_objects_E");
-   E214 : Short_Integer; pragma Import (Ada, E214, "system__tasking__protected_objects__entries_E");
-   E218 : Short_Integer; pragma Import (Ada, E218, "system__tasking__queuing_E");
-   E222 : Short_Integer; pragma Import (Ada, E222, "system__tasking__stages_E");
+   E198 : Short_Integer; pragma Import (Ada, E198, "system__random_seed_E");
+   E206 : Short_Integer; pragma Import (Ada, E206, "system__tasking__initialization_E");
+   E214 : Short_Integer; pragma Import (Ada, E214, "system__tasking__protected_objects_E");
+   E216 : Short_Integer; pragma Import (Ada, E216, "system__tasking__protected_objects__entries_E");
+   E220 : Short_Integer; pragma Import (Ada, E220, "system__tasking__queuing_E");
+   E224 : Short_Integer; pragma Import (Ada, E224, "system__tasking__stages_E");
    E156 : Short_Integer; pragma Import (Ada, E156, "system__img_llli_E");
    E153 : Short_Integer; pragma Import (Ada, E153, "system__img_lli_E");
 
@@ -59,7 +59,7 @@ package body ada_main is
 
    procedure finalize_library is
    begin
-      E214 := E214 - 1;
+      E216 := E216 - 1;
       declare
          procedure F1;
          pragma Import (Ada, F1, "system__tasking__protected_objects__entries__finalize_spec");
@@ -282,17 +282,17 @@ package body ada_main is
       Ada.Text_Io'Elab_Body;
       E118 := E118 + 1;
       System.Random_Seed'Elab_Body;
-      E196 := E196 + 1;
+      E198 := E198 + 1;
       System.Tasking.Initialization'Elab_Body;
-      E204 := E204 + 1;
+      E206 := E206 + 1;
       System.Tasking.Protected_Objects'Elab_Body;
-      E212 := E212 + 1;
-      System.Tasking.Protected_Objects.Entries'Elab_Spec;
       E214 := E214 + 1;
+      System.Tasking.Protected_Objects.Entries'Elab_Spec;
+      E216 := E216 + 1;
       System.Tasking.Queuing'Elab_Body;
-      E218 := E218 + 1;
+      E220 := E220 + 1;
       System.Tasking.Stages'Elab_Body;
-      E222 := E222 + 1;
+      E224 := E224 + 1;
       System.Img_Llli'Elab_Spec;
       E156 := E156 + 1;
       System.Img_Lli'Elab_Spec;

@@ -20,13 +20,13 @@ RV NO_IMPLICIT_LOOPS
 RV NO_ELABORATION_CODE
 RV NO_OBSOLESCENT_FEATURES
 
-U ada_main%b		b__simulation.adb	58a7774a OO PK IL
+U ada_main%b		b__simulation.adb	e22965f7 OO PK IL
 W ada%s			ada.ads			ada.ali
 W ada.exceptions%s	a-except.adb		a-except.ali
 W system%s		system.ads		system.ali
 W system.restrictions%s	s-restri.adb		s-restri.ali
 
-U ada_main%s		b__simulation.ads	5687a0de EE NE OO PK IL
+U ada_main%s		b__simulation.ads	10c1bab5 EE NE OO PK IL
 W system%s		system.ads		system.ali
 W system.parameters%s	s-parame.adb		s-parame.ali
 W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
@@ -34,8 +34,8 @@ W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
 D ada.ads		20230814081238 76789da1 ada%s
 D a-except.ads		20230814081238 2a7d8d70 ada.exceptions%s
 D a-unccon.ads		20230814081238 0e9b276f ada.unchecked_conversion%s
-D b__simulation.ads	20231013234126 25c1e26b ada_main%s
-D b__simulation.adb	20231013234126 a4943014 ada_main%b
+D b__simulation.ads	20231015121232 6387f800 ada_main%s
+D b__simulation.adb	20231015121232 585c38c2 ada_main%b
 D system.ads		20230814081238 f0509fe6 system%s
 D s-parame.ads		20230814081238 d494a4a6 system.parameters%s
 D s-restri.ads		20230814081238 f38f2845 system.restrictions%s
@@ -56,7 +56,7 @@ X 1 ada.ads
 X 2 a-except.ads
 44K13*Exceptions 295e19 5|8w10
 X 4 b__simulation.ads
-6K9*ada_main 725l5 725e13 5|10b14 350l5 350t13
+6K9*ada_main 731l5 731e13 5|10b14 350l5 350t13
 8i4*gnat_argc{integer} 12m22 12r22 5|322r10 323m10
 9m4*gnat_argv{6|67M9} 13m22 13r22 5|324m10
 10m4*gnat_envp{6|67M9} 14m22 14r22 5|326m7
@@ -90,7 +90,7 @@ X 4 b__simulation.ads
 . 419r22 421r22 423r22 425r22 427r22 429r22 431r22 433r22 435r22 437r22 439r22
 . 441r22 443r22 445r22 447r22 449r22 451r22 453r22 455r22 457r22 459r22 461r22
 . 463r22 465r22 467r22 469r22 471r22 473r22 475r22 477r22 479r22 481r22 483r22
-. 485r22 487r22 489r22 491r22 493r22
+. 485r22 487r22 489r22 491r22 493r22 495r22 497r22
 43m4*u00001{42M9} 44r22
 45m4*u00002{42M9} 46r22
 47m4*u00003{42M9} 48r22
@@ -317,6 +317,8 @@ X 4 b__simulation.ads
 489m4*u00224{42M9} 490r22
 491m4*u00225{42M9} 492r22
 493m4*u00226{42M9} 494r22
+495m4*u00227{42M9} 496r22
+497m4*u00228{42M9} 498r22
 X 5 b__simulation.adb
 12i4 E080{short_integer} 12m46 12r46 240m7 240r15
 13i4 E010{short_integer} 13m46 13r46 248m7 248r15
@@ -350,12 +352,12 @@ X 5 b__simulation.adb
 41i4 E006{short_integer} 41m46 41r46 277m7 277r15
 42i4 E164{short_integer} 42m46 42r46 280m7 280r15
 43i4 E118{short_integer} 43m46 43r46 69m7 69r15 283m7 283r15
-44i4 E196{short_integer} 44m46 44r46 285m7 285r15
-45i4 E204{short_integer} 45m46 45r46 287m7 287r15
-46i4 E212{short_integer} 46m46 46r46 289m7 289r15
-47i4 E214{short_integer} 47m46 47r46 62m7 62r15 291m7 291r15
-48i4 E218{short_integer} 48m46 48r46 293m7 293r15
-49i4 E222{short_integer} 49m46 49r46 295m7 295r15
+44i4 E198{short_integer} 44m46 44r46 285m7 285r15
+45i4 E206{short_integer} 45m46 45r46 287m7 287r15
+46i4 E214{short_integer} 46m46 46r46 289m7 289r15
+47i4 E216{short_integer} 47m46 47r46 62m7 62r15 291m7 291r15
+48i4 E220{short_integer} 48m46 48r46 293m7 293r15
+49i4 E224{short_integer} 49m46 49r46 295m7 295r15
 50i4 E156{short_integer} 50m46 50r46 297m7 297r15
 51i4 E153{short_integer} 51m46 51r46 299m7 299r15
 53a4 Sec_Default_Sized_Stacks(10|43R9) 210m32 210r32
