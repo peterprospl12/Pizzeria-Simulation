@@ -1,5 +1,5 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.md)
-[![pl](https://img.shields.io/badge/lang-es-yellow.svg)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.pl.md)
+[![en](https://img.shields.io/badge/lang-en-blue.svg)](https://github.com/peterprospl12/Pizzeria-Simulation/blob/master/README.md)
+[![pl](https://img.shields.io/badge/lang-pl-red.svg)](https://github.com/peterprospl12/Pizzeria-Simulation/blob/master/README.pl.md)
 
 
 # Ada - Simulation
