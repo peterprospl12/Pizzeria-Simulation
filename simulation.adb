@@ -5,7 +5,7 @@ with Ada.Numerics.Discrete_Random;
 
 procedure Simulation is
 
-    Number_Of_Products: constant Integer := 5;
+   Number_Of_Products: constant Integer := 5;
    Number_Of_Assemblies: constant Integer := 3;
    Number_Of_Consumers: constant Integer := 2;
    subtype Product_Type is Integer range 1 .. Number_Of_Products;
@@ -26,7 +26,7 @@ procedure Simulation is
    end Consumer;
 
    task type Buffer is
-	  entry Take(Product: in Product_Type; Number: in Integer; Accepted: out Boolean);
+      entry Take(Product: in Product_Type; Number: in Integer; Accepted: out Boolean);
       entry Deliver(Assembly: in Assembly_Type; Number: out Integer; Accepted: out Boolean);
    end Buffer;
 
@@ -73,8 +73,9 @@ procedure Simulation is
                   Put_Line("[P] Buffer rejected " & Product_Name(Product_Type_Number) & " (try again in 5s)");
                   delay Duration(5.0);
                end if;
-            or delay Duration(3.0);
-               Put_Line("[P] Buffer is too busy at the moment to accept " & Product_Name(Product_Type_Number) & " delivery!");
+            else
+               Put_Line("[P] Buffer is too busy at the moment.");
+               delay Duration(5.0);
             end select;
          end loop;
       end loop;
@@ -105,25 +106,37 @@ procedure Simulation is
       end Start;
 
       -- Consumer life --
+      Put_Line("");
       Put_Line("[C] New consumer " & Consumer_Name(Consumer_Nb));
+      Put_Line("");
       loop
          Assembly_Type := Random_Assembly.Random(G2);
          Consumption := Random_Consumption.Random(G);
+         Put_Line("");
          Put_Line("[C] " & Consumer_Name(Consumer_Nb) & " thinks what to eat today");
+         Put_Line("");
          delay Duration(Consumption);
+         Put_Line("");
          Put_Line("[C] " & Consumer_Name(Consumer_Nb) & " wants " & Assembly_Name(Assembly_Type));
+         Put_Line("");
          loop
             select
                B.Deliver(Assembly_Type, Assembly_Number, Accepted);
                if Accepted then
+                  Put_Line("");
                   Put_Line("[C] " & Consumer_Name(Consumer_Nb) & ": taken pizza " & Assembly_Name(Assembly_Type) & " number " & Integer'Image(Assembly_Number));
+                  Put_Line("");
                   exit;
                else
+                  Put_Line("");
                   Put_Line("[C " & Consumer_Name(Consumer_Nb) & "]" &  "Not enough products for " & Assembly_Name(Assembly_Type) & " (waiting 3s)");
+                  Put_Line("");
                   delay Duration(3.0);
                end if;
             or delay Duration(10.0);
+               Put_Line("");
                Put_Line("[C] " & Consumer_Name(Consumer_Nb) & " got angry and left the restaurant");
+               Put_Line("");
                delay Duration(5.0);
                exit;
             end select;
@@ -160,6 +173,12 @@ procedure Simulation is
          end loop;
       end Setup_Variables;
 
+      procedure Clear_Variables is
+      begin
+         for P in Product_Type loop
+            Storage(P) := 2;
+         end loop;
+      end Clear_Variables;
 
       function Can_Accept(Product: Product_Type) return Boolean is
          Free: Integer;
@@ -205,10 +224,13 @@ procedure Simulation is
 
       procedure Storage_Contents is
       begin
-         for W in Product_Type loop
-            Put_Line("[B] Storage contents: " & Integer'Image(Storage(W)) & " "
-                     & Product_Name(W));
-         end loop;
+        
+         Put_Line("[S] Contents: " & Integer'Image(Storage(1)) & " " & Product_Name(1)
+                  & Integer'Image(Storage(2)) & " " & Product_Name(2)
+                  & Integer'Image(Storage(3)) & " " & Product_Name(3)
+                  & Integer'Image(Storage(4)) & " " & Product_Name(4)
+                  & Integer'Image(Storage(5)) & " " & Product_Name(5));
+      
       end Storage_Contents;
 
    begin
@@ -223,12 +245,14 @@ procedure Simulation is
                   Storage(Product) := Storage(Product) + 1;
                   In_Storage := In_Storage + 1;
                   Accepted := True;
+                  delay Duration(0.5);
                else
                   Accepted := False;
                end if;
             exception
                when isFull =>
                   Put_Line("[B] Storage is full!");
+                  Clear_Variables;
             end Take;
             Storage_Contents;
 
@@ -243,6 +267,7 @@ procedure Simulation is
                   Number := Assembly_Number(Assembly);
                   Assembly_Number(Assembly) := Assembly_Number(Assembly) + 1;
                   Accepted := True;
+                  delay Duration(10.0);
                else
                   Number := 0;
                   Accepted := False;

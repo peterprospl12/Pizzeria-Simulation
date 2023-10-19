@@ -334,9 +334,9 @@ package body ada_main is
    end;
 
 --  BEGIN Object file/option list
-   --   C:\users\qsend\downloads\adasymulacja\.objs\simulation.o
-   --   -LC:\users\qsend\downloads\adasymulacja\.objs\
-   --   -LC:\users\qsend\downloads\adasymulacja\.objs\
+   --   C:\users\peter\documents\visual studio code\ada\pizzeria-simulation\.objs\simulation.o
+   --   -LC:\users\peter\documents\visual studio code\ada\pizzeria-simulation\.objs\
+   --   -LC:\users\peter\documents\visual studio code\ada\pizzeria-simulation\.objs\
    --   -LC:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/13.2.0/adalib/
    --   -static
    --   -lgnarl
